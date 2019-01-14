@@ -4,6 +4,7 @@
 #include <utility/imumaths.h>
 #include <PID_v1.h>
 #include "MotorDriver.h"
+#include "TimingEvent.h"
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (5)
@@ -24,6 +25,9 @@ const double Kd = 0.6;
 const double PID_SAMPLE_TIME = BNO055_SAMPLERATE_DELAY_MS;
 
 PID motorController = PID(&robotPitch, &motorPWM, &pitchSetpoint, Kp, Ki, Kd, DIRECT);
+
+void getGyroDataAndComputePID();
+TimingEvent gyroPIDEvent = TimingEvent::setInterval(BNO055_SAMPLERATE_DELAY_MS, &getGyroDataAndComputePID);
 
 void setupBNO() {
   /* Initialise the sensor */
@@ -48,14 +52,7 @@ void setupMotorPIDController() {
   motorController.SetMode(AUTOMATIC);
 }
 
-void setup() {
-  // Serial.begin(115200);
-  setupBNO();
-  setupMotorPIDController();
-  motorDriver.initializeDriver();
-}
-
-void loop() {
+void getGyroDataAndComputePID() {
   sensors_event_t event;
   bno.getEvent(&event);
 
@@ -73,11 +70,20 @@ void loop() {
   else {
     motorDriver.driverMotorStop();
   }
+}
+
+void setup() {
+  // Serial.begin(115200);
+  setupBNO();
+  setupMotorPIDController();
+  motorDriver.initializeDriver();
+}
+
+void loop() {
+  gyroPIDEvent.update();
 
   // Serial.print("Robot Pitch: ");
   // Serial.print(robotPitch);
   // Serial.print("\tPWM: ");
   // Serial.println(motorPWM);
-
-  delay(BNO055_SAMPLERATE_DELAY_MS);
 }
