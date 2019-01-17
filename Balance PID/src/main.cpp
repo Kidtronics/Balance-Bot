@@ -5,6 +5,7 @@
 #include <PID_v1.h>
 #include "MotorDriver.h"
 #include "TimingEvent.h"
+#include "DebugUtils.h"
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (5)
@@ -34,7 +35,7 @@ void setupBNO() {
   if(!bno.begin())
   {
     /* There was a problem detecting the BNO055 ... check your connections */
-    // Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
    
@@ -55,8 +56,10 @@ void setupMotorPIDController() {
 void getGyroDataAndComputePID() {
   sensors_event_t event;
   bno.getEvent(&event);
-
   robotPitch = event.orientation.z;
+
+  debugSendTimestamp();
+  debugSend(PITCH_STR, robotPitch);
 
   if (abs(robotPitch) <= 45 && motorController.Compute()) {
     // Ouput the pwm signal.
@@ -66,14 +69,16 @@ void getGyroDataAndComputePID() {
     else {
       motorDriver.driverMotorBackward(abs(motorPWM));
     }
+    debugSend(PWM_STR, motorPWM);
   }
   else {
     motorDriver.driverMotorStop();
+    debugSend(PWM_STR, 0);
   }
 }
 
 void setup() {
-  // Serial.begin(115200);
+  Serial.begin(115200);
   setupBNO();
   setupMotorPIDController();
   motorDriver.initializeDriver();
@@ -81,9 +86,4 @@ void setup() {
 
 void loop() {
   gyroPIDEvent.update();
-
-  // Serial.print("Robot Pitch: ");
-  // Serial.print(robotPitch);
-  // Serial.print("\tPWM: ");
-  // Serial.println(motorPWM);
 }
