@@ -1,6 +1,6 @@
 {
     "terminal.integrated.env.osx": {
-        "PATH": "/Users/baixiao/.platformio/penv/bin:/Users/baixiao/.platformio/penv:/usr/texbin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/texbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands",
+        "PATH": "/Users/bhuang/.platformio/penv/bin:/Users/bhuang/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
         "PLATFORMIO_CALLER": "vscode"
     }
 }

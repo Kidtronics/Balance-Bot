@@ -6,11 +6,8 @@
 #include "MotorDriver.h"
 #include "TimingEvent.h"
 #include "DebugUtils.h"
+#include "BNO.h"
 
-/* Set the delay between fresh samples */
-#define BNO055_SAMPLERATE_DELAY_MS (5)
-
-Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 // Motor Driver.
 MotorDriver motorDriver = MotorDriver();
@@ -30,20 +27,6 @@ PID motorController = PID(&robotPitch, &motorPWM, &pitchSetpoint, Kp, Ki, Kd, DI
 void getGyroDataAndComputePID();
 TimingEvent gyroPIDEvent = TimingEvent::setInterval(BNO055_SAMPLERATE_DELAY_MS, &getGyroDataAndComputePID);
 
-void setupBNO() {
-  /* Initialise the sensor */
-  if(!bno.begin())
-  {
-    /* There was a problem detecting the BNO055 ... check your connections */
-    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-    while(1);
-  }
-   
-  delay(1000);
-
-  /* Use external crystal for better accuracy */
-  bno.setExtCrystalUse(true);
-}
 
 void setupMotorPIDController() {
   motorController.SetSampleTime(PID_SAMPLE_TIME);
@@ -55,7 +38,7 @@ void setupMotorPIDController() {
 
 void getGyroDataAndComputePID() {
   sensors_event_t event;
-  bno.getEvent(&event);
+  BNO.getEvent(&event);
   robotPitch = event.orientation.z;
 
   debugSendTimestamp();
