@@ -15,6 +15,8 @@ MotorDriver motorDriver = MotorDriver();
 // PID parameters.
 double pitchSetpoint = 0;
 double robotPitch = 0;
+double angularVelocity = 0;
+double lastMeasuredPitch = 0;
 double motorPWM = 0;
 
 const double Kp = 15;
@@ -40,9 +42,12 @@ void getGyroDataAndComputePID() {
   sensors_event_t event;
   BNO.getEvent(&event);
   robotPitch = event.orientation.z;
+  angularVelocity = (robotPitch - lastMeasuredPitch) / PID_SAMPLE_TIME;
+  lastMeasuredPitch = robotPitch;
 
   debugSendTimestamp();
   debugSend(PITCH_STR, robotPitch);
+  debugSend(ANGULAR_VELOCITY_STR, angularVelocity);
 
   if (abs(robotPitch) <= 45 && motorController.Compute()) {
     // Ouput the pwm signal.
