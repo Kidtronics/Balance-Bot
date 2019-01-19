@@ -22,6 +22,7 @@ double motorPWM = 0;
 const double Kp = 15;
 const double Ki = 0;
 const double Kd = 0.6;
+
 const double PID_SAMPLE_TIME = BNO055_SAMPLERATE_DELAY_MS;
 
 PID motorController = PID(&robotPitch, &motorPWM, &pitchSetpoint, Kp, Ki, Kd, DIRECT);
@@ -38,6 +39,10 @@ void setupMotorPIDController() {
   motorController.SetMode(AUTOMATIC);
 }
 
+bool deadband(double value, double lower, double upper) {
+  return value >= lower && value <= upper;
+}
+
 void getGyroDataAndComputePID() {
   sensors_event_t event;
   BNO.getEvent(&event);
@@ -50,19 +55,16 @@ void getGyroDataAndComputePID() {
   debugSend(ANGULAR_VELOCITY_STR, angularVelocity);
 
   if (abs(robotPitch) <= 45 && motorController.Compute()) {
+    if (deadband(robotPitch, -0.5, 0.5)) {
+      motorPWM = 0;
+    }
     // Ouput the pwm signal.
-    if (motorPWM >= 0) {
-      motorDriver.driverMotorFoward(motorPWM);
-    }
-    else {
-      motorDriver.driverMotorBackward(abs(motorPWM));
-    }
-    debugSend(PWM_STR, motorPWM);
+    motorDriver.driverMotorWithPWM(motorPWM);
   }
   else {
     motorDriver.driverMotorStop();
-    debugSend(PWM_STR, 0);
   }
+  debugSend(PWM_STR, motorPWM);
 }
 
 void setup() {
