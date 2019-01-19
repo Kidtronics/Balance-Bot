@@ -8,6 +8,18 @@ void MotorDriver::initializeDriver() {
     pinMode(LEFT_MOTOR_BACKWARD_OUTPUT_PIN, OUTPUT);
 }
 
+void MotorDriver::driverMotorWithPWM(int pwm) {
+  if (pwm > 0) {
+    driverMotorFoward(pwm);
+  }
+  else if (pwm < 0) {
+    driverMotorBackward(abs(pwm));
+  }
+  else {
+    driverMotorStop();
+  }
+}
+
 void MotorDriver::driverMotorFoward(unsigned int pwm) {
     analogWrite(RIGHT_MOTOR_FORWARD_OUTPUT_PIN, pwm + MOTOR_PWM_DRIVING_THRESHOLD);
     analogWrite(LEFT_MOTOR_FORWARD_OUTPUT_PIN, pwm + MOTOR_PWM_DRIVING_THRESHOLD);

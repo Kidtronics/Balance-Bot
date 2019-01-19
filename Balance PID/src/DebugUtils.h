@@ -6,6 +6,7 @@
 #define PITCH_STR "Pitch"
 #define PWM_STR "PWM"
 #define ANGULAR_VELOCITY_STR "AngVel"
+#define ANGULAR_VELOCITY_SETPOINT_STR "AngVelS"
 #define ANGULAR_ACCELERATION_STR "AngAcc"
 
 extern Serial_ Serial;
