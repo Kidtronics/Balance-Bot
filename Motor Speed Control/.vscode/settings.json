@@ -4,6 +4,6 @@
         "PLATFORMIO_CALLER": "vscode"
     },
     "files.associations": {
-        "string.h": "c"
+        "vector": "cpp"
     }
 }
