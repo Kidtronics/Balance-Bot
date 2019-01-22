@@ -15,9 +15,9 @@
  */
 
 class TimingEvent {
-private:
+public:
     enum EventType {INTERVAL, TIMEOUT};
-
+private:
     void (*m_callback)();
     unsigned long m_lastTime;
     unsigned long m_interval;
@@ -26,12 +26,14 @@ private:
 
     TimingEvent(unsigned long interval, EventType eventType, void (*callback) ());
 public:
+    TimingEvent(){};
     /** Execute the callback at an interval in milliseconds. */
     static TimingEvent setInterval(unsigned long interval, void (*callback) ());
     /** Execute the callback only once, interval is in in milliseconds. */
     static TimingEvent setTimeout(unsigned long interval, void (*callback) ());
     /** Update event in the loop. It returns if the callback is executed.*/
     bool update();
+    EventType getEventType();
 };
 
 #endif

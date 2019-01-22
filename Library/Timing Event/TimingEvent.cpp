@@ -42,3 +42,7 @@ bool TimingEvent::update() {
         return false;
     }
 }
+
+TimingEvent::EventType TimingEvent::getEventType() {
+    return m_eventType;
+}
