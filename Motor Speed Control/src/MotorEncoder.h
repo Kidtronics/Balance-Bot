@@ -1,6 +1,13 @@
 #ifndef MOTOR_ENCODER_H
 #define MOTOR_ENCODER_H
 
+/** 
+ * A library for encoder.
+ * You can only instantiate two instances of the encoder class,
+ * extra instances of the encoder will overwrite the interrupt callback functions
+ * of the previous instances.
+*/
+
 #define DEFAULT_DEGREE_PER_INCREMENT 0.6 // In degrees.
 #define MAX_NUM_ENCODERS 2
 
