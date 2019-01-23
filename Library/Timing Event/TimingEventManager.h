@@ -26,11 +26,14 @@ public:
      * false when the events array is exceeded.
      */
     bool setInterval(unsigned long interval, void (*callback) ());
+    bool setInterval(unsigned long interval, void (*callback) (void*), void* arg);
     /** 
      * Set the timeout event. Return true on success, 
      * false when the events array is exceeded.
      */
     bool setTimeout(unsigned long interval, void (*callback) ());
+    bool setTimeout(unsigned long interval, void (*callback) (void*), void* arg);
+    /** This update function will need to be run inside the loop() function. */
     void update();
 
     TimingEventManager(TimingEventManager const&) = delete;

@@ -34,6 +34,13 @@ public:
     void negate();
     /** Callback function when interrupt on phase A pin occurs. */
     void interruptCallback();
+
+    /** 
+     * Don't use copy constructor and assignment operator,
+     * because we only want maximum of two encoders.
+     */
+    MotorEncoder(MotorEncoder const&) = delete;
+    void operator=(MotorEncoder const&)  = delete;
 };
 
 void interruptCallbackEncoder0();

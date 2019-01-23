@@ -17,11 +17,37 @@ bool TimingEventManager::setInterval(unsigned long interval, void (*callback) ()
     return true;
 }
 
+bool TimingEventManager::setInterval(
+    unsigned long interval, 
+    void (*callback) (void*), 
+    void* arg) 
+{
+    if (m_eventsSize == MAX_NUM_EVENTS) {
+        return false;
+    }
+    m_events[m_eventsSize] = TimingEvent::setInterval(interval, callback, arg);
+    m_eventsSize++;
+    return true;
+}
+
 bool TimingEventManager::setTimeout(unsigned long interval, void (*callback) ()) {
     if (m_eventsSize == MAX_NUM_EVENTS) {
         return false;
     }
     m_events[m_eventsSize] = TimingEvent::setTimeout(interval, callback);
+    m_eventsSize++;
+    return true;
+}
+
+bool TimingEventManager::setTimeout(
+    unsigned long interval, 
+    void (*callback) (void*), 
+    void* arg)
+{
+    if (m_eventsSize == MAX_NUM_EVENTS) {
+        return false;
+    }
+    m_events[m_eventsSize] = TimingEvent::setTimeout(interval, callback, arg);
     m_eventsSize++;
     return true;
 }
