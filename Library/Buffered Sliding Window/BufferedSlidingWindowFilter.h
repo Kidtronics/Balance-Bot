@@ -17,7 +17,7 @@ private:
     double m_sumOfSamples;
 
 public:
-    BufferedSlidingWindowFilter(double* m_buffer, int sampleSize);
+    BufferedSlidingWindowFilter(double* m_buffer, int maxSampleSize);
 
     double getAverageValue();
 
