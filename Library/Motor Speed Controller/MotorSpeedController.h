@@ -12,6 +12,7 @@
 #define MOTOR_KI 1
 #define MOTOR_KD 0
 #define PWM_OUTPUT_LIMIT 200
+#define DEFAULT_MOTOR_SPEED_DEAD_BAND 100
 
 class MotorSpeedController {
 private:
@@ -19,6 +20,7 @@ private:
     double m_speedSetpoint;
     double m_currentSpeed;
     double m_outputPWM;
+    double m_motorSpeedDeadband;
     unsigned int m_forwardPin;
     unsigned int m_backwardPin;
     /** Bufer that slidng window filter uses. */
@@ -32,6 +34,8 @@ public:
     MotorSpeedController(MotorEncoder& encoder, unsigned int forwardPin, unsigned int backwardPin);
     /** Set speed in degrees per second. */
     void setSpeedDeg(double speed);
+    /** Set the dead band speed, in which output pwm will be zero. */
+    void setDeadband(double deadband);
     /** Get current speed in degrees per second. */
     double getCurrentSpeedDeg();
     /** Get current output pwm. */
