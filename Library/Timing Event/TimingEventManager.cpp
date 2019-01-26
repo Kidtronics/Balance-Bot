@@ -61,10 +61,10 @@ void TimingEventManager::update() {
             for (int i=idx; i < m_eventsSize-1; i++) {
                 m_events[idx] = m_events[idx+1];
             }
-            m_eventsSize--;
+            --m_eventsSize;
         }
         else {
-            idx++;
+            ++idx;
         }
     }
 }

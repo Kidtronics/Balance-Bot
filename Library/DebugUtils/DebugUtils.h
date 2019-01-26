@@ -8,7 +8,8 @@
 #define ANGULAR_VELOCITY_STR "AngVel"
 #define ANGULAR_VELOCITY_SETPOINT_STR "AngVelS"
 #define ANGULAR_ACCELERATION_STR "AngAcc"
-#define RPM_STR "RPM"
+#define MOTOR_SPEED_STR "MSpeed"
+#define MOTOR_SPEED_SETPOINT_STR "MSpeedS"
 
 extern Serial_ Serial;
 

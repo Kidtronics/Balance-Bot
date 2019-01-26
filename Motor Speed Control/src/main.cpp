@@ -22,16 +22,27 @@ MotorSpeedController speedController1(encoder1, LEFT_MOTOR_FORWARD_PIN, LEFT_MOT
 
 void calculateEncoderSpeed() {
   debugSendTimestamp();
-  debugSend(ANGULAR_VELOCITY_STR, speedController1.getCurrentSpeedDeg());
-  debugSend(PWM_STR, speedController1.getOutputPWM());
+  debugSend(MOTOR_SPEED_STR, speedController0.getCurrentSpeedDeg());
+  debugSend(PWM_STR, speedController0.getOutputPWM());
+}
+
+void startMotor();
+
+void stopMotor() {
+  speedController0.setSpeedDeg(0);
+  TimingEventManager::getInstance().setTimeout(3000, &startMotor);
+}
+
+void startMotor() {
+  speedController0.setSpeedDeg(900);
+  TimingEventManager::getInstance().setTimeout(3000, &stopMotor);
 }
 
 void setup() {
   Serial.begin(112500);
   TimingEventManager::getInstance().setInterval(ENCODER_SPEED_SAMPLE_RATE, &calculateEncoderSpeed);
+  TimingEventManager::getInstance().setTimeout(3000, &startMotor);
   encoder1.negate();
-  speedController0.setSpeedDeg(0);
-  speedController1.setSpeedDeg(0);
 }
 
 void loop() {

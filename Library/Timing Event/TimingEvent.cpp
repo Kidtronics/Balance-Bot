@@ -8,6 +8,7 @@ TimingEvent::TimingEvent(unsigned long interval, EventType eventType, void (*cal
     m_eventType = eventType;
     m_callback = callback;
     m_callbackType = NO_ARGUMENT;
+    m_lastTime = millis();
 }
 
 TimingEvent::TimingEvent(
@@ -22,6 +23,7 @@ TimingEvent::TimingEvent(
     m_callabckWithPointer = callback;
     m_callbackType = POINTER;
     m_callbackArg = arg;
+    m_lastTime = millis();
 }
 
 TimingEvent TimingEvent::setInterval(

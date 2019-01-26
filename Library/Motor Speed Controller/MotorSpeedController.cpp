@@ -19,13 +19,13 @@ void calculateEncoderSpeedAndPID(void* ptr) {
 
     // Compute pid and output the pwm.
     if (speedController->m_motorSpeedPIDController.Compute()) {
-        if (speedController->m_outputPWM > speedController->m_motorSpeedDeadband) {
+        if (speedController->m_outputPWM > 0) {
             analogWrite(speedController->m_forwardPin, speedController->m_outputPWM + MOTOR_PWM_THRESHOLD);
             analogWrite(speedController->m_backwardPin, 0);
         }
-        else if (speedController->m_outputPWM < speedController->m_motorSpeedDeadband) {
+        else if (speedController->m_outputPWM < 0) {
             analogWrite(speedController->m_forwardPin, 0);
-            analogWrite(speedController->m_backwardPin, -speedController->m_outputPWM + MOTOR_PWM_THRESHOLD);
+            analogWrite(speedController->m_backwardPin, -speedController->m_outputPWM - MOTOR_PWM_THRESHOLD);
         }
         else {
             analogWrite(speedController->m_forwardPin, 0);
@@ -35,8 +35,7 @@ void calculateEncoderSpeedAndPID(void* ptr) {
 }
 
 MotorSpeedController::MotorSpeedController(MotorEncoder& encoder, unsigned int forwardPin, unsigned int backwardPin)
-    : m_speedSetpoint(0), m_currentSpeed(0),m_outputPWM(0), m_motorSpeedDeadband(DEFAULT_MOTOR_SPEED_DEAD_BAND),
-    m_filter(m_filterBuffer, MOTOR_SPEED_FILTER_BUFFER_SIZE),
+    : m_speedSetpoint(0), m_currentSpeed(0),m_outputPWM(0), m_filter(m_filterBuffer, MOTOR_SPEED_FILTER_BUFFER_SIZE),
     m_motorSpeedPIDController(&m_currentSpeed, &m_outputPWM, &m_speedSetpoint, MOTOR_KP, MOTOR_KI, MOTOR_KD, DIRECT)
 {
     m_encoder = &encoder;
@@ -55,10 +54,6 @@ MotorSpeedController::MotorSpeedController(MotorEncoder& encoder, unsigned int f
 
 void MotorSpeedController::setSpeedDeg(double speed) {
     m_speedSetpoint = speed;
-}
-
-void MotorSpeedController::setDeadband(double deadband) {
-    m_motorSpeedDeadband = deadband;
 }
 
 double MotorSpeedController::getCurrentSpeedDeg() {
