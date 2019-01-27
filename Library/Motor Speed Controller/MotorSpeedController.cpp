@@ -25,7 +25,7 @@ void calculateEncoderSpeedAndPID(void* ptr) {
         }
         else if (speedController->m_outputPWM < 0) {
             analogWrite(speedController->m_forwardPin, 0);
-            analogWrite(speedController->m_backwardPin, -speedController->m_outputPWM - MOTOR_PWM_THRESHOLD);
+            analogWrite(speedController->m_backwardPin, abs(speedController->m_outputPWM) + MOTOR_PWM_THRESHOLD);
         }
         else {
             analogWrite(speedController->m_forwardPin, 0);

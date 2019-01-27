@@ -7,10 +7,9 @@
 
 #define ENCODER_SPEED_SAMPLE_RATE 4 // in milliseconds.
 #define MOTOR_SPEED_FILTER_BUFFER_SIZE 4
-#define MOTOR_PWM_THRESHOLD 120 // A threshold to enable motor to move.
-// #define MOTOR_BACKWARD_PWM_THRESHOLD 120
+#define MOTOR_PWM_THRESHOLD 70 // A threshold to enable motor to move.
 #define MOTOR_KP 0.4
-#define MOTOR_KI 1
+#define MOTOR_KI 2
 #define MOTOR_KD 0.0001
 #define PWM_OUTPUT_LIMIT 1000
 
