@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #define PITCH_STR "Pitch"
+#define PITCH_SETPOINT_STR "PitchS"
 #define PWM_STR "PWM"
 #define ANGULAR_VELOCITY_STR "AngVel"
 #define ANGULAR_VELOCITY_SETPOINT_STR "AngVelS"

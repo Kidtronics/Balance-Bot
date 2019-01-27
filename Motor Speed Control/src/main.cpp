@@ -20,11 +20,11 @@ MotorSpeedController speedController0(encoder0, RIGHT_MOTOR_FORWARD_PIN, RIGHT_M
 MotorEncoder encoder1(ENCODER1_PHASE_A_PIN, ENCODER1_PHASE_B_PIN);
 MotorSpeedController speedController1(encoder1, LEFT_MOTOR_FORWARD_PIN, LEFT_MOTOR_BACKWARD_PIN);
 
-double setSpeed = 300;
+double setSpeed = 500;
 
 void calculateEncoderSpeed() {
   debugSendTimestamp();
-  debugSend(PWM_STR, speedController0.getOutputPWM());
+  // debugSend(PWM_STR, speedController0.getOutputPWM());
   debugSend(MOTOR_SPEED_STR, speedController0.getCurrentSpeedDeg());
 }
 
