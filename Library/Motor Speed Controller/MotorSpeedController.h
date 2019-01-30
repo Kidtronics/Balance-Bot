@@ -9,7 +9,7 @@
 #define MOTOR_SPEED_FILTER_BUFFER_SIZE 4
 #define MOTOR_PWM_THRESHOLD 70 // A threshold to enable motor to move.
 #define MOTOR_KP 0.4
-#define MOTOR_KI 2
+#define MOTOR_KI 0
 #define MOTOR_KD 0
 #define PWM_OUTPUT_LIMIT 1000
 

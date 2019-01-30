@@ -20,7 +20,7 @@ MotorSpeedController speedController0(encoder0, RIGHT_MOTOR_FORWARD_PIN, RIGHT_M
 MotorEncoder encoder1(ENCODER1_PHASE_A_PIN, ENCODER1_PHASE_B_PIN);
 MotorSpeedController speedController1(encoder1, LEFT_MOTOR_FORWARD_PIN, LEFT_MOTOR_BACKWARD_PIN);
 
-double setSpeed = 500;
+double setSpeed = 2000;
 
 void calculateEncoderSpeed() {
   debugSendTimestamp();
