@@ -50,6 +50,7 @@ MotorSpeedController::MotorSpeedController(MotorEncoder& encoder, unsigned int f
     m_motorSpeedPIDController.SetSampleTime(ENCODER_SPEED_SAMPLE_RATE);
     m_motorSpeedPIDController.SetMode(AUTOMATIC);
     m_motorSpeedPIDController.SetOutputLimits(-PWM_OUTPUT_LIMIT, PWM_OUTPUT_LIMIT);
+    m_motorSpeedPIDController.SetIntegratorLimits(-PID_INEGRATOR_LIMIT, PID_INEGRATOR_LIMIT);
 }
 
 void MotorSpeedController::setSpeedDeg(double speed) {

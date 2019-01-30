@@ -34,11 +34,12 @@ double pitchSetpoint = 0;
 double robotPitch = 0;
 double lastMeasuredPitch = 0;
 double motorSpeedSetpoint = 0;
-double speedSetPointLimit = 1500;
+double speedSetPointLimit = 2000;
+double speedIntegratorLimit = 500;
 
 const double Kp = 150;
-const double Ki = 20;
-const double Kd = 0;
+const double Ki = 0;
+const double Kd = 1;
 
 const double PID_SAMPLE_TIME = BNO055_SAMPLERATE_DELAY_MS;
 
@@ -53,31 +54,33 @@ BufferedSlidingWindowFilter averageSpeed(bufferSpeed, bufferSize);
 double robotSpeed = 0;
 double desiredSpeed = 0;
 
-const double SpeedKp = 0.01;
+const double SpeedKp = 0.005;
 const double SpeedKi = 0;
 const double SpeedKd = 0;
+const double PitchSetpointLimit = 20;
 
-const double ROBOT_SPEED_PID_SAMPLE_TIME = ENCODER_SPEED_SAMPLE_RATE * bufferSize;
+const double ROBOT_SPEED_PID_SAMPLE_TIME = ENCODER_SPEED_SAMPLE_RATE;
 
-// PID robotSpeedController = PID(&robotSpeed, &pitchSetpoint, &desiredSpeed, SpeedKp, SpeedKi, SpeedKd, DIRECT);
+PID robotSpeedController = PID(&robotSpeed, &pitchSetpoint, &desiredSpeed, SpeedKp, SpeedKi, SpeedKd, REVERSE);
 
 void setupPitchPIDController() {
   encoder1.negate();
   pitchController.SetSampleTime(PID_SAMPLE_TIME);
   pitchController.SetOutputLimits(-speedSetPointLimit, speedSetPointLimit);
+  pitchController.SetIntegratorLimits(-speedIntegratorLimit, speedIntegratorLimit);
   pitchController.SetMode(AUTOMATIC);
 }
 
 void setupRobotSpeedController() {
-  // robotSpeedController.SetSampleTime(ROBOT_SPEED_PID_SAMPLE_TIME);
-  // robotSpeedController.SetOutputLimits(-3, 3);
-  // robotSpeedController.SetMode(AUTOMATIC);
+  robotSpeedController.SetSampleTime(ROBOT_SPEED_PID_SAMPLE_TIME);
+  robotSpeedController.SetOutputLimits(-PitchSetpointLimit, PitchSetpointLimit);
+  robotSpeedController.SetMode(AUTOMATIC);
 }
 
 void calculateRobotSpeedAndComputePID() {
-  // averageSpeed.addNewSample((speedController0.getCurrentSpeedDeg() + speedController1.getCurrentSpeedDeg()) / 2);
-  // robotSpeed = averageSpeed.getAverageValue();
-  // robotSpeedController.Compute();
+  averageSpeed.addNewSample((speedController0.getCurrentSpeedDeg() + speedController1.getCurrentSpeedDeg()) / 2);
+  robotSpeed = averageSpeed.getAverageValue();
+  robotSpeedController.Compute();
 }
 
 void getGyroDataAndComputePID() {
@@ -97,8 +100,8 @@ void getGyroDataAndComputePID() {
 
   debugSendTimestamp();
   debugSend(PITCH_STR, robotPitch);
-  // debugSend(PITCH_SETPOINT_STR, pitchSetpoint);
-  // debugSend(MOTOR_SPEED_SETPOINT_STR, motorSpeedSetpoint);
+  debugSend(PITCH_SETPOINT_STR, pitchSetpoint);
+  debugSend(MOTOR_SPEED_SETPOINT_STR, motorSpeedSetpoint);
   debugSend(MOTOR_SPEED_STR, speedController0.getCurrentSpeedDeg());
   // debugSend(PWM_STR, speedController0.getOutputPWM());
 }
@@ -109,7 +112,7 @@ void setup() {
   setupPitchPIDController();
   setupRobotSpeedController();
   TimingEventManager::getInstance().setInterval(BNO055_SAMPLERATE_DELAY_MS, &getGyroDataAndComputePID);
-  // TimingEventManager::getInstance().setInterval(ENCODER_SPEED_SAMPLE_RATE, &calculateRobotSpeedAndComputePID);
+  TimingEventManager::getInstance().setInterval(ENCODER_SPEED_SAMPLE_RATE, &calculateRobotSpeedAndComputePID);
 }
 
 void loop() {
