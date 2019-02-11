@@ -54,10 +54,11 @@ BufferedSlidingWindowFilter averageSpeed(bufferSpeed, bufferSize);
 double robotSpeed = 0;
 double desiredSpeed = 0;
 
-const double SpeedKp = 0.005;
-const double SpeedKi = 0;
-const double SpeedKd = 0;
-const double PitchSetpointLimit = 20;
+const double SpeedKp = 0.008;
+const double SpeedKi = 0.001;
+const double SpeedKd = 0;//0.0001;
+const double PitchSetpointLimit = 10;
+const double PitchIntegratorLimit = 1;
 
 const double ROBOT_SPEED_PID_SAMPLE_TIME = ENCODER_SPEED_SAMPLE_RATE;
 
@@ -74,7 +75,9 @@ void setupPitchPIDController() {
 void setupRobotSpeedController() {
   robotSpeedController.SetSampleTime(ROBOT_SPEED_PID_SAMPLE_TIME);
   robotSpeedController.SetOutputLimits(-PitchSetpointLimit, PitchSetpointLimit);
+  robotSpeedController.SetIntegratorLimits(-PitchIntegratorLimit, PitchIntegratorLimit);
   robotSpeedController.SetMode(AUTOMATIC);
+  robotSpeedController.SetDerivativeFilterSize(5);
 }
 
 void calculateRobotSpeedAndComputePID() {

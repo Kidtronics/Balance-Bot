@@ -19,6 +19,7 @@
  ***************************************************************************/
 PID::PID(double* Input, double* Output, double* Setpoint,
         double Kp, double Ki, double Kd, int POn, int ControllerDirection)
+   : inputFilter(filterBuffer, 1)
 {
    myOutput = Output;
    myInput = Input;
@@ -67,8 +68,12 @@ bool PID::Compute()
       /*Compute all the working error variables*/
       double input = *myInput;
       double error = *mySetpoint - input;
-      double dInput = (input - lastInput);
-      outputSum+= (ki * error);
+
+      // We filter the input for the derivative term,
+      // because derivative term tends to be noisy.
+      inputFilter.addNewSample(input);
+      double dInput = (inputFilter.getAverageValue() - lastInput);
+      outputSum += (ki * error);
 
       /*Add Proportional on Measurement, if P_ON_M is specified*/
       if(!pOnE) outputSum-= kp * dInput;
@@ -186,6 +191,15 @@ void PID::SetIntegratorLimits(double min, double max) {
    integratorMin = min;
    integratorMax = max;
    integratorLimitIsSet = true;
+}
+
+void PID::SetDerivativeFilterSize(int size) {
+   if (size <= 0)
+      return;
+   if (size > MAX_FILTER_SIZE) {
+      size = MAX_FILTER_SIZE;
+   }
+   inputFilter = BufferedSlidingWindowFilter(filterBuffer, size);
 }
 
 /* SetMode(...)****************************************************************

@@ -2,6 +2,10 @@
 #define PID_v1_h
 #define LIBRARY_VERSION	1.1.1
 
+#define MAX_FILTER_SIZE 20
+
+#include "BufferedSlidingWindowFilter.h"
+
 class PID
 {
 
@@ -54,7 +58,8 @@ class PID
   /** Clamp the value of integrator. */
   void SetIntegratorLimits(double min, double max);
 										  
-										  
+  /** Derivative term can be filtered by a sliding window to reduce noise. */
+	void SetDerivativeFilterSize(int size);
 										  
   //Display functions ****************************************************************
 	double GetKp();						  // These functions query the pid for interal values.
@@ -90,6 +95,8 @@ class PID
   double integratorMin, integratorMax;
   bool integratorLimitIsSet;
 	bool inAuto, pOnE;
+  double filterBuffer[MAX_FILTER_SIZE];
+  BufferedSlidingWindowFilter inputFilter;
 };
 #endif
 
