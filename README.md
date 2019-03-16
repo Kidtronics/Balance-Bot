@@ -6,7 +6,7 @@ therefore it is easiest to compile and run the code with platform IO installed e
 The code can drive the two-wheel robot that has Inertial Measurement Unit (IMU), speed encoders and a motor to balance itself.
 The IMU used is BNO055, the encoder is 600 steps/revolution generic encoder, and the motor is a hobby geared DC motor.
 
-## Architecture Preview
+## Architecture Overview
 ### Scheduling
 The scheduling is timing event architecture. All the event or repeated calculations are done 
 within corresponding callback functions. A global singleton called TimingEventManager manages all the callback functions.
